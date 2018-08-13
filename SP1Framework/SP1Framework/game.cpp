@@ -247,6 +247,17 @@ void renderCharacter()
     g_Console.writeToBuffer(g_sChar.m_cLocation, (char)1, charColor);
 }
 
+void lives()
+{
+	int lifepoint = 3;
+
+	if (lifepoint == 0) //if life points are 0
+	{
+		if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to splash screen
+			g_eGameState = S_SPLASHSCREEN;
+	}
+}
+
 void renderFramerate()
 {
     COORD c;
