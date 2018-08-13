@@ -68,12 +68,15 @@ void shutdown( void )
 // Input    : Void
 // Output   : void
 //--------------------------------------------------------------
+
+//Changed from Arrow keys to WASD
+//---------------------------------Movement---------------------------------
 void getInput( void )
 {    
-    g_abKeyPressed[K_UP]     = isKeyPressed(VK_UP);
-    g_abKeyPressed[K_DOWN]   = isKeyPressed(VK_DOWN);
-    g_abKeyPressed[K_LEFT]   = isKeyPressed(VK_LEFT);
-    g_abKeyPressed[K_RIGHT]  = isKeyPressed(VK_RIGHT);
+    g_abKeyPressed[K_UP]     = isKeyPressed(0x57);
+    g_abKeyPressed[K_DOWN]   = isKeyPressed(0x53);
+    g_abKeyPressed[K_LEFT]   = isKeyPressed(0x41);
+    g_abKeyPressed[K_RIGHT]  = isKeyPressed(0x44);
     g_abKeyPressed[K_SPACE]  = isKeyPressed(VK_SPACE);
     g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 }
@@ -245,6 +248,18 @@ void renderCharacter()
         charColor = 0x0A;
     }
     g_Console.writeToBuffer(g_sChar.m_cLocation, (char)1, charColor);
+}
+
+//---------------------------------Life Points---------------------------------
+void lives()
+{
+	int lifepoint = 3;
+
+	if (lifepoint == 0) //if life points are 0
+	{
+		if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to splash screen
+			g_eGameState = S_SPLASHSCREEN;
+	}
 }
 
 void renderFramerate()
