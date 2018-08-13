@@ -8,6 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -228,44 +229,30 @@ void renderGame()
 
 void renderMap()
 {
-	int pos = 0;
-	COORD c;
-
-	char Map[80][40]; //storing map 
-
+	//char Map[height][width]; //storing map
+	vector<string> map;
 	string line;
 	ifstream myfile("map.txt");
-	int y = 0;
+	COORD c;
+
 	//storing text text file into array
 	if (myfile.is_open())
 	{
-
 		while (getline(myfile, line))
 		{
-			for (int x = 0; x < 40; x++)
-			{
-				Map[y][x] = line[x];
-			}
-			y++;
+			map.push_back(line);
+
 		}
 		myfile.close();
 	}
 
-	//printing out the 2d array 
-	for (int i = 0; i < 81; i++)
+	int pos = 0;
+	int xpos = 0;
+	for (int i = 0; i < map.size(); i++) //keep printing each line as long as vector != 0
 	{
-		int xpos = 0;
-		c.Y = 1 + pos;
-		for (int j = 0; j < 41; j++)
-		{
-			c.X = xpos;
-			if (Map[i][j] == '@')
-			{
-				g_Console.writeToBuffer(c, Map[i][j], 0x1F);
-			}
-
-			xpos++;
-		}
+		c.X = xpos;
+		c.Y = pos + 1;
+		g_Console.writeToBuffer(c, map[i]);
 		pos++;
 	}
 }
