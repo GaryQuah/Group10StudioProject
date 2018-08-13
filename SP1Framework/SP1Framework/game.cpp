@@ -247,7 +247,7 @@ void renderCharacter()
     g_Console.writeToBuffer(g_sChar.m_cLocation, (char)1, charColor);
 }
 
-void lives()
+void lives() //life points
 {
 	int lifepoint = 3;
 
