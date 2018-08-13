@@ -1,8 +1,4 @@
-﻿  main.cpp
-  game.cpp
-  timer.cpp
-  console.cpp
-  Generating Code...
+﻿  game.cpp
   LINK : D:\Users\l533\Source\Repos\Group10StudioProject\SP1Framework\Debug\SP1Framework.exe not found or not built by the last incremental link; performing full link
   SP1Framework.vcxproj -> D:\Users\l533\Source\Repos\Group10StudioProject\SP1Framework\Debug\SP1Framework.exe
   SP1Framework.vcxproj -> D:\Users\l533\Source\Repos\Group10StudioProject\SP1Framework\Debug\SP1Framework.pdb (Full PDB)
