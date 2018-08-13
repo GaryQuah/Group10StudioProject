@@ -68,6 +68,9 @@ void shutdown( void )
 // Input    : Void
 // Output   : void
 //--------------------------------------------------------------
+
+//Changed from Arrow keys to WASD
+//---------------------------------Movement---------------------------------
 void getInput( void )
 {    
     g_abKeyPressed[K_UP]     = isKeyPressed(0x57);
@@ -247,6 +250,7 @@ void renderCharacter()
     g_Console.writeToBuffer(g_sChar.m_cLocation, (char)1, charColor);
 }
 
+//---------------------------------Life Points---------------------------------
 void lives()
 {
 	int lifepoint = 3;
