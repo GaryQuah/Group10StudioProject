@@ -1,45 +1,352 @@
-// This is the main file to hold everthing together
-
-#include "Framework\timer.h"
+// This is the main file for the game logic and function testing 
+//
+//
 #include "game.h"
+#include "Framework\console.h"
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <vector>
 
-CStopWatch g_Timer;                            // Timer function to keep track of time and the frame rate
-bool g_bQuitGame = false;                    // Set to true if you want to quit the game
-const unsigned char gc_ucFPS = 100;                // FPS of this game
-const unsigned int gc_uFrameTime = 1000 / gc_ucFPS;    // time for each frame
+using namespace std;
 
-//main loop declaration
-void mainLoop( void );
+double  g_dElapsedTime;
+double  g_dDeltaTime;
+bool    g_abKeyPressed[K_COUNT];
 
-// TODO:
-// Bug in waitUntil. it waits for the time from getElapsedTime to waitUntil, but should be insignificant.
+vector<string> map;
 
-// main function - starting function
-// You should not be modifying this unless you know what you are doing
-int main( void )
-{
-    init();      // initialize your variables
-    mainLoop();  // main loop
-    shutdown();  // do clean up, if any. free memory.
-    
-    return 0;
-}
+// Game specific variables here
+SGameChar   g_sChar;
+EGAMESTATES g_eGameState = S_SPLASHSCREEN;
+double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
+
+					   // Console object
+Console g_Console(80, 25, "SP1 Framework");
 
 //--------------------------------------------------------------
-// Purpose  : This main loop calls functions to get input, 
-//            update and render the game at a specific frame rate
-//            You should not be modifying this unless you know what you are doing.
+// Purpose  : Initialisation function
+//            Initialize variables, allocate memory, load data from file, etc. 
+//            This is called once before entering into your main loop
 // Input    : void
 // Output   : void
 //--------------------------------------------------------------
-void mainLoop( void )
+void init(void)
 {
-    g_Timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-    while (!g_bQuitGame)      // run this loop until user wants to quit 
-    {        
-        getInput();                         // get keyboard input
-        update(g_Timer.getElapsedTime());   // update the game
-        render();                           // render the graphics output to screen
-        g_Timer.waitUntil(gc_uFrameTime);   // Frame rate limiter. Limits each frame to a specified time in ms.      
-    }    
+	// Set precision for floating point output
+	g_dElapsedTime = 0.0;
+	g_dBounceTime = 0.0;
+
+	loadMap();
+
+	// sets the initial state for the game
+	g_eGameState = S_SPLASHSCREEN;
+
+	g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
+	g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
+	g_sChar.m_bActive = true;
+	// sets the width, height and the font name to use in the console
+	g_Console.setConsoleFont(0, 16, L"Consolas");
+}
+
+//--------------------------------------------------------------
+// Purpose  : Reset before exiting the program
+//            Do your clean up of memory here
+//            This is called once just before the game exits
+// Input    : Void
+// Output   : void
+//--------------------------------------------------------------
+void shutdown(void)
+{
+	// Reset to white text on black background
+	colour(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+
+	g_Console.clearBuffer();
+}
+
+//--------------------------------------------------------------
+// Purpose  : Getting all the key press states
+//            This function checks if any key had been pressed since the last time we checked
+//            If a key is pressed, the value for that particular key will be true
+//
+//            Add more keys to the enum in game.h if you need to detect more keys
+//            To get other VK key defines, right click on the VK define (e.g. VK_UP) and choose "Go To Definition" 
+//            For Alphanumeric keys, the values are their ascii values (uppercase).
+// Input    : Void
+// Output   : void
+//--------------------------------------------------------------
+
+//Changed from Arrow keys to WASD
+//---------------------------------Movement---------------------------------
+void getInput(void)
+{
+	g_abKeyPressed[K_UP] = isKeyPressed(0x57);
+	g_abKeyPressed[K_DOWN] = isKeyPressed(0x53);
+	g_abKeyPressed[K_LEFT] = isKeyPressed(0x41);
+	g_abKeyPressed[K_RIGHT] = isKeyPressed(0x44);
+	g_abKeyPressed[K_SPACE] = isKeyPressed(VK_SPACE);
+	g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
+}
+
+//--------------------------------------------------------------
+// Purpose  : Update function
+//            This is the update function
+//            double dt - This is the amount of time in seconds since the previous call was made
+//
+//            Game logic should be done here.
+//            Such as collision checks, determining the position of your game characters, status updates, etc
+//            If there are any calls to write to the console here, then you are doing it wrong.
+//
+//            If your game has multiple states, you should determine the current state, and call the relevant function here.
+//
+// Input    : dt = deltatime
+// Output   : void
+//--------------------------------------------------------------
+void update(double dt)
+{
+	// get the delta time
+	g_dElapsedTime += dt;
+	g_dDeltaTime = dt;
+
+	switch (g_eGameState)
+	{
+	case S_SPLASHSCREEN: splashScreenWait(); // game logic for the splash screen
+		break;
+	case S_GAME: gameplay(); // gameplay logic when we are in the game
+		break;
+	}
+}
+//--------------------------------------------------------------
+// Purpose  : Render function is to update the console screen
+//            At this point, you should know exactly what to draw onto the screen.
+//            Just draw it!
+//            To get an idea of the values for colours, look at console.h and the URL listed there
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
+void render()
+{
+	clearScreen();      // clears the current screen and draw from scratch 
+	switch (g_eGameState)
+	{
+	case S_SPLASHSCREEN: renderSplashScreen();
+		break;
+	case S_GAME: renderGame();
+		break;
+	}
+	renderFramerate();  // renders debug information, frame rate, elapsed time, etc
+	renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
+}
+
+void splashScreenWait()    // waits for time to pass in splash screen
+{
+	if (g_dElapsedTime > 1.0) // wait for 3 seconds to switch to game mode, else do nothing
+		g_eGameState = S_GAME;
+}
+
+void moveAI()
+{
+	renderAI();
+}
+
+void gameplay()            // gameplay logic
+{
+	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
+	moveCharacter();    // moves the character, collision detection, physics, etc
+						// sound can be played here too.
+	moveAI();
+}
+
+void moveCharacter()
+{
+	bool bSomethingHappened = false;
+	bool bCollide = false;
+	if (g_dBounceTime > g_dElapsedTime)
+		return;
+
+	// Updating the location of the character based on the key press
+	// providing a beep sound whenver we shift the character
+	if (g_abKeyPressed[K_UP] && g_sChar.m_cLocation.Y > 0)
+	{
+		//Beep(1440, 30);
+		g_sChar.m_cLocation.Y--;
+		bSomethingHappened = true;
+	}
+
+	//Collision Test
+	if (g_abKeyPressed[K_UP])
+	{
+		if (g_sChar.m_cLocation.Y < 2)
+		{
+			g_sChar.m_cLocation.Y++;
+			bCollide = true;
+		}
+	}
+
+	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 0)
+	{
+		//Beep(1440, 30);
+		g_sChar.m_cLocation.X--;
+		bSomethingHappened = true;
+	}
+	if (g_abKeyPressed[K_DOWN] && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
+	{
+		//Beep(1440, 30);
+		g_sChar.m_cLocation.Y++;
+		bSomethingHappened = true;
+	}
+	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
+	{
+		//Beep(1440, 30);
+		g_sChar.m_cLocation.X++;
+		bSomethingHappened = true;
+	}
+	if (g_abKeyPressed[K_SPACE])
+	{
+		g_sChar.m_bActive = !g_sChar.m_bActive;
+		bSomethingHappened = true;
+	}
+
+	if (bSomethingHappened)
+	{
+		// set the bounce time to some time in the future to prevent accidental triggers
+		g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+	}
+
+}
+void processUserInput()
+{
+	// quits the game if player hits the escape key
+	if (g_abKeyPressed[K_ESCAPE])
+		g_bQuitGame = true;
+}
+
+void clearScreen()
+{
+	// Clears the buffer with this colour attribute
+	g_Console.clearBuffer(0x00);
+}
+
+void renderSplashScreen()  // renders the splash screen
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 3;
+	c.X = c.X / 2 - 9;
+	g_Console.writeToBuffer(c, "A game in 5 seconds", 0x03);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 20;
+	g_Console.writeToBuffer(c, "Press <Space> to change character colour", 0x09);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 9;
+	g_Console.writeToBuffer(c, "Press 'Esc' to quit", 0x09);
+}
+
+void renderGame()
+{
+	renderMap();        // renders the map to the buffer first
+	renderCharacter();  // renders the character into the buffer
+	renderAI();
+}
+
+void renderAI()
+{
+	COORD d;
+	d.X = 5;
+	d.Y = 5;
+
+	if (g_abKeyPressed[K_SPACE])
+	{
+		d.X++;
+	}
+
+	g_Console.writeToBuffer(d, 234);
+}
+
+void loadMap() // level 1
+{
+	//pushing text file into vector
+	string line;
+	ifstream myfile("map.txt");
+
+	//storing text text file into vector string
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			for (int i = 0; i < line.length(); i++)
+			{
+				if (line[i] == '@')
+				{
+					line[i] = 219;
+				}
+			}
+			map.push_back(line);
+		}
+		myfile.close();
+	}
+}
+
+void renderMap()
+{
+	COORD c;
+
+	// render 
+	int pos = 0;
+	int xpos = 0;
+	for (int i = 0; i < map.size(); i++) //keep printing each line as long as vector != 0
+	{
+		c.X = xpos;
+		c.Y = pos + 1;
+		g_Console.writeToBuffer(c, map[i]);
+		pos++;
+	}
+}
+
+void renderCharacter()
+{
+	// Draw the location of the character
+	WORD charColor = 0x0C;
+	if (g_sChar.m_bActive)
+	{
+		charColor = 0x0A;
+	}
+	g_Console.writeToBuffer(g_sChar.m_cLocation, (char)80, charColor);
+}
+
+//---------------------------------Life Points---------------------------------
+void lives()
+{
+	int lifepoint = 3;
+
+	if (lifepoint == 0) //if life points are 0
+	{
+		if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to splash screen
+			g_eGameState = S_SPLASHSCREEN;
+	}
+}
+
+void renderFramerate()
+{
+	COORD c;
+	// displays the framerate
+	std::ostringstream ss;
+	ss << std::fixed << std::setprecision(3);
+	ss << 1.0 / g_dDeltaTime << "fps";
+	c.X = g_Console.getConsoleSize().X - 9;
+	c.Y = 0;
+	g_Console.writeToBuffer(c, ss.str());
+
+	// displays the elapsed time
+	ss.str("");
+	ss << g_dElapsedTime << "secs";
+	c.X = 0;
+	c.Y = 0;
+	g_Console.writeToBuffer(c, ss.str(), 0x59);
+}
+void renderToScreen()
+{
+	// Writes the buffer to the console, hence you will see what you have written
+	g_Console.flushBufferToConsole();
 }

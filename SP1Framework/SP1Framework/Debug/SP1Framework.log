@@ -1,3 +1,32 @@
-﻿  game.cpp
-  SP1Framework.vcxproj -> D:\Users\l533\Downloads\SP1Framework\Debug\SP1Framework.exe
-  SP1Framework.vcxproj -> D:\Users\l533\Downloads\SP1Framework\Debug\SP1Framework.pdb (Full PDB)
+﻿main.obj : error LNK2005: "void __cdecl clearScreen(void)" (?clearScreen@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl gameplay(void)" (?gameplay@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl getInput(void)" (?getInput@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl init(void)" (?init@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl lives(void)" (?lives@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl loadMap(void)" (?loadMap@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl moveAI(void)" (?moveAI@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl moveCharacter(void)" (?moveCharacter@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl processUserInput(void)" (?processUserInput@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl render(void)" (?render@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl renderAI(void)" (?renderAI@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl renderCharacter(void)" (?renderCharacter@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl renderFramerate(void)" (?renderFramerate@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl renderGame(void)" (?renderGame@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl renderMap(void)" (?renderMap@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl renderSplashScreen(void)" (?renderSplashScreen@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl renderToScreen(void)" (?renderToScreen@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl shutdown(void)" (?shutdown@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl splashScreenWait(void)" (?splashScreenWait@@YAXXZ) already defined in game.obj
+main.obj : error LNK2005: "void __cdecl update(double)" (?update@@YAXN@Z) already defined in game.obj
+main.obj : error LNK2005: "struct SGameChar g_sChar" (?g_sChar@@3USGameChar@@A) already defined in game.obj
+main.obj : error LNK2005: "enum EGAMESTATES g_eGameState" (?g_eGameState@@3W4EGAMESTATES@@A) already defined in game.obj
+main.obj : error LNK2005: "double g_dBounceTime" (?g_dBounceTime@@3NA) already defined in game.obj
+main.obj : error LNK2005: "double g_dElapsedTime" (?g_dElapsedTime@@3NA) already defined in game.obj
+main.obj : error LNK2005: "double g_dDeltaTime" (?g_dDeltaTime@@3NA) already defined in game.obj
+main.obj : error LNK2005: "bool * g_abKeyPressed" (?g_abKeyPressed@@3PA_NA) already defined in game.obj
+main.obj : error LNK2005: "class std::vector<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::allocator<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > > map" (?map@@3V?$vector@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@A) already defined in game.obj
+main.obj : error LNK2005: "class Console g_Console" (?g_Console@@3VConsole@@A) already defined in game.obj
+game.obj : error LNK2001: unresolved external symbol "bool g_bQuitGame" (?g_bQuitGame@@3_NA)
+main.obj : error LNK2001: unresolved external symbol "bool g_bQuitGame" (?g_bQuitGame@@3_NA)
+MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol _main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+D:\Users\l533\Desktop\Group10StudioProject\SP1Framework\Debug\SP1Framework.exe : fatal error LNK1120: 2 unresolved externals
