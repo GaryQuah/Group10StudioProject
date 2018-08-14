@@ -1,15 +1,4 @@
-﻿  main.cpp
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\main.cpp(264): warning C4309: 'argument': truncation of constant value
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\main.cpp(278): warning C4018: '<': signed/unsigned mismatch
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\main.cpp(282): warning C4309: '=': truncation of constant value
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\main.cpp(298): warning C4018: '<': signed/unsigned mismatch
-  game.cpp
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\game.cpp(264): warning C4309: 'argument': truncation of constant value
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\game.cpp(278): warning C4018: '<': signed/unsigned mismatch
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\game.cpp(282): warning C4309: '=': truncation of constant value
-d:\users\l533\source\repos\group10studioproject6\sp1framework\sp1framework\game.cpp(298): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-main.obj : error LNK2005: "void __cdecl clearScreen(void)" (?clearScreen@@YAXXZ) already defined in game.obj
+﻿main.obj : error LNK2005: "void __cdecl clearScreen(void)" (?clearScreen@@YAXXZ) already defined in game.obj
 main.obj : error LNK2005: "void __cdecl gameplay(void)" (?gameplay@@YAXXZ) already defined in game.obj
 main.obj : error LNK2005: "void __cdecl getInput(void)" (?getInput@@YAXXZ) already defined in game.obj
 main.obj : error LNK2005: "void __cdecl init(void)" (?init@@YAXXZ) already defined in game.obj
@@ -40,4 +29,4 @@ main.obj : error LNK2005: "class Console g_Console" (?g_Console@@3VConsole@@A) a
 game.obj : error LNK2001: unresolved external symbol "bool g_bQuitGame" (?g_bQuitGame@@3_NA)
 main.obj : error LNK2001: unresolved external symbol "bool g_bQuitGame" (?g_bQuitGame@@3_NA)
 MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol _main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
-D:\Users\l533\Source\Repos\Group10StudioProject6\SP1Framework\Debug\SP1Framework.exe : fatal error LNK1120: 2 unresolved externals
+D:\Users\l533\Desktop\Group10StudioProject\SP1Framework\Debug\SP1Framework.exe : fatal error LNK1120: 2 unresolved externals
