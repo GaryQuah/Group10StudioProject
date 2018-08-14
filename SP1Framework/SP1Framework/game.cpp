@@ -16,6 +16,8 @@ double  g_dElapsedTime;
 double  g_dDeltaTime;
 bool    g_abKeyPressed[K_COUNT];
 
+vector<string> map;
+
 // Game specific variables here
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN;
@@ -30,14 +32,14 @@ Console g_Console(80, 25, "SP1 Framework");
 //            This is called once before entering into your main loop
 // Input    : void
 // Output   : void
-//--------------------------------------------------------------
-
+//-----------------------------------------------------------------
 void init(void)
 {
-
 	// Set precision for floating point output
 	g_dElapsedTime = 0.0;
 	g_dBounceTime = 0.0;
+
+	loadMap();
 
 	// sets the initial state for the game
 	g_eGameState = S_SPLASHSCREEN;
@@ -47,29 +49,6 @@ void init(void)
 	g_sChar.m_bActive = true;
 	// sets the width, height and the font name to use in the console
 	g_Console.setConsoleFont(0, 16, L"Consolas");
-
-	vector<string> map;
-	string line;
-	ifstream myfile("map.txt");
-	COORD c;
-
-	//storing text text file into array
-	if (myfile.is_open())
-	{
-		while (getline(myfile, line))
-		{
-			for (int i = 0; i < line.length(); i++)
-			{
-				if (line[i] == '@')
-				{
-					line[i] = 219;
-				}
-			}
-			map.push_back(line);
-
-		}
-		myfile.close();
-	}
 }
 
 //--------------------------------------------------------------
@@ -169,7 +148,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 
 void moveAI()
 {
-	renderAI;
+	renderAI();
 }
 
 void gameplay()            // gameplay logic
@@ -196,7 +175,7 @@ void moveCharacter()
 		bSomethingHappened = true;
 	}
 
-	//Collsion Wall Up
+	//Collision Test
 	if (g_abKeyPressed[K_UP])
 	{
 		if (g_sChar.m_cLocation.Y < 2)
@@ -208,57 +187,22 @@ void moveCharacter()
 
 	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 0)
 	{
-		if (g_sChar.m_cLocation.Y != '#') {
-			//Beep(1440, 30);
-			g_sChar.m_cLocation.X--;
-			bSomethingHappened = true;
-		}
+		//Beep(1440, 30);
+		g_sChar.m_cLocation.X--;
+		bSomethingHappened = true;
 	}
-
-	//Collision Wall Left
-	if (g_abKeyPressed[K_LEFT])
-	{
-		if (g_sChar.m_cLocation.X < 1)
-		{
-			g_sChar.m_cLocation.X++;
-			bCollide = true;
-		}
-	}
-
 	if (g_abKeyPressed[K_DOWN] && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
 	{
 		//Beep(1440, 30);
 		g_sChar.m_cLocation.Y++;
 		bSomethingHappened = true;
 	}
-
-	//Collsion Wall Down
-	if (g_abKeyPressed[K_DOWN])
-	{
-		if (g_sChar.m_cLocation.Y > 13)
-		{
-			g_sChar.m_cLocation.Y--;
-			bCollide = true;
-		}
-	}
 	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
 	{
-		
 		//Beep(1440, 30);
 		g_sChar.m_cLocation.X++;
 		bSomethingHappened = true;
 	}
-
-	//Collision Wall Right
-	if (g_abKeyPressed[K_RIGHT])
-	{
-		if (g_sChar.m_cLocation.X > 51)
-		{
-			g_sChar.m_cLocation.X--;
-			bCollide = true;
-		}
-	}
-
 	if (g_abKeyPressed[K_SPACE])
 	{
 		g_sChar.m_bActive = !g_sChar.m_bActive;
@@ -308,7 +252,7 @@ void renderGame()
 
 void renderAI()
 {
-	COORD d = g_Console.getConsoleSize();
+	COORD d;
 	d.X = 5;
 	d.Y = 5;
 
@@ -320,12 +264,35 @@ void renderAI()
 	g_Console.writeToBuffer(d, 234);
 }
 
-
-void renderMap(vector<string> map, COORD c)
+void loadMap() // level 1
 {
-	
-	//char Map[height][width]; //storing map
+	//pushing text file into vector
+	string line;
+	ifstream myfile("map.txt");
 
+	//storing text text file into vector string
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			for (int i = 0; i < line.length(); i++)
+			{
+				if (line[i] == '@')
+				{
+					line[i] = 219;
+				}
+			}
+			map.push_back(line);
+		}
+		myfile.close();
+	}
+}
+
+void renderMap()
+{
+	COORD c;
+
+	// render 
 	int pos = 0;
 	int xpos = 0;
 	for (int i = 0; i < map.size(); i++) //keep printing each line as long as vector != 0
