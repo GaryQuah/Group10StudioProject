@@ -142,14 +142,10 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		g_eGameState = S_GAME;
 }
 
-
-
 void moveAI()
 {
 	renderAI;
 }
-
-
 
 void gameplay()            // gameplay logic
 {
@@ -175,7 +171,7 @@ void moveCharacter()
 		bSomethingHappened = true;
 	}
 
-	//Collision Test
+	//Collsion Wall Up
 	if (g_abKeyPressed[K_UP])
 	{
 		if (g_sChar.m_cLocation.Y < 2)
@@ -191,11 +187,32 @@ void moveCharacter()
 		g_sChar.m_cLocation.X--;
 		bSomethingHappened = true;
 	}
+
+	//Collision Wall Left
+	if (g_abKeyPressed[K_LEFT])
+	{
+		if (g_sChar.m_cLocation.X < 1)
+		{
+			g_sChar.m_cLocation.X++;
+			bCollide = true;
+		}
+	}
+
 	if (g_abKeyPressed[K_DOWN] && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
 	{
 		//Beep(1440, 30);
 		g_sChar.m_cLocation.Y++;
 		bSomethingHappened = true;
+	}
+
+	//Collsion Wall Down
+	if (g_abKeyPressed[K_DOWN])
+	{
+		if (g_sChar.m_cLocation.Y > 13)
+		{
+			g_sChar.m_cLocation.Y--;
+			bCollide = true;
+		}
 	}
 	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
 	{
@@ -203,6 +220,17 @@ void moveCharacter()
 		g_sChar.m_cLocation.X++;
 		bSomethingHappened = true;
 	}
+
+	//Collision Wall Right
+	if (g_abKeyPressed[K_RIGHT])
+	{
+		if (g_sChar.m_cLocation.X > 51)
+		{
+			g_sChar.m_cLocation.X--;
+			bCollide = true;
+		}
+	}
+
 	if (g_abKeyPressed[K_SPACE])
 	{
 		g_sChar.m_bActive = !g_sChar.m_bActive;

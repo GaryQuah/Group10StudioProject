@@ -1,8 +1,9 @@
-﻿  game.cpp
-d:\users\l533\source\repos\group10studioproject5\sp1framework\sp1framework\game.cpp(150): warning C4551: function call missing argument list
-d:\users\l533\source\repos\group10studioproject5\sp1framework\sp1framework\game.cpp(266): warning C4309: 'argument': truncation of constant value
-d:\users\l533\source\repos\group10studioproject5\sp1framework\sp1framework\game.cpp(284): warning C4018: '<': signed/unsigned mismatch
-d:\users\l533\source\repos\group10studioproject5\sp1framework\sp1framework\game.cpp(288): warning C4309: '=': truncation of constant value
-d:\users\l533\source\repos\group10studioproject5\sp1framework\sp1framework\game.cpp(299): warning C4018: '<': signed/unsigned mismatch
-  SP1Framework.vcxproj -> D:\Users\l533\Source\Repos\Group10StudioProject5\SP1Framework\Debug\SP1Framework.exe
-  SP1Framework.vcxproj -> D:\Users\l533\Source\Repos\Group10StudioProject5\SP1Framework\Debug\SP1Framework.pdb (Full PDB)
+﻿cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+  game.cpp
+d:\users\l533\source\repos\group10studioproject3\sp1framework\sp1framework\game.cpp(147): warning C4551: function call missing argument list
+d:\users\l533\source\repos\group10studioproject3\sp1framework\sp1framework\game.cpp(291): warning C4309: 'argument': truncation of constant value
+d:\users\l533\source\repos\group10studioproject3\sp1framework\sp1framework\game.cpp(307): warning C4018: '<': signed/unsigned mismatch
+d:\users\l533\source\repos\group10studioproject3\sp1framework\sp1framework\game.cpp(311): warning C4309: '=': truncation of constant value
+d:\users\l533\source\repos\group10studioproject3\sp1framework\sp1framework\game.cpp(322): warning C4018: '<': signed/unsigned mismatch
+  SP1Framework.vcxproj -> D:\Users\l533\Source\Repos\Group10StudioProject3\SP1Framework\Debug\SP1Framework.exe
+  SP1Framework.vcxproj -> D:\Users\l533\Source\Repos\Group10StudioProject3\SP1Framework\Debug\SP1Framework.pdb (Full PDB)
