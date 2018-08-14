@@ -212,6 +212,9 @@ void renderSplashScreen()  // renders the splash screen
     c.X = g_Console.getConsoleSize().X / 2 - 20;
     g_Console.writeToBuffer(c, "Press <Space> to change character colour", 0x09);
     c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 4;
+	g_Console.writeToBuffer(c, "WASD to move", 0x09);
+	c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 2 - 9;
     g_Console.writeToBuffer(c, "Press 'Esc' to quit", 0x09);
 }
@@ -227,9 +230,16 @@ void renderMap()
 	COORD c;
     for (int i = 0; i < 80; ++i)
     {
-        c.X = i + 1;
-		c.Y = i + 1;
+		c.X = i + 1;
+		c.Y = 1;
         g_Console.writeToBuffer(c, "@");
+
+		for (int j = 0; j < 30; ++j)
+		{
+			c.X = 0;
+			c.Y = j + 1;
+			g_Console.writeToBuffer(c, "W");
+		}
     }
 	
 }
