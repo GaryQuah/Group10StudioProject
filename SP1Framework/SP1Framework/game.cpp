@@ -142,11 +142,21 @@ void splashScreenWait()    // waits for time to pass in splash screen
 		g_eGameState = S_GAME;
 }
 
+
+
+void moveAI()
+{
+	renderAI;
+}
+
+
+
 void gameplay()            // gameplay logic
 {
 	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	moveCharacter();    // moves the character, collision detection, physics, etc
 						// sound can be played here too.
+	moveAI();
 }
 
 void moveCharacter()
@@ -237,6 +247,21 @@ void renderGame()
 {
 	renderMap();        // renders the map to the buffer first
 	renderCharacter();  // renders the character into the buffer
+	renderAI();
+}
+
+void renderAI()
+{
+	COORD d = g_Console.getConsoleSize();
+	d.X = 5;
+	d.Y = 5;
+
+	if (g_abKeyPressed[K_SPACE])
+	{
+		d.X++;
+	}
+
+	g_Console.writeToBuffer(d, 234);
 }
 
 void renderMap()
@@ -274,6 +299,9 @@ void renderMap()
 		g_Console.writeToBuffer(c, map[i]);
 		pos++;
 	}
+
+
+	
 }
 
 void renderCharacter()
