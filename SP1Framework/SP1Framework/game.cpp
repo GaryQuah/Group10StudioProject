@@ -327,9 +327,6 @@ void renderMap()
 		g_Console.writeToBuffer(c, map[i]);
 		pos++;
 	}
-
-
-	
 }
 
 void renderCharacter()
