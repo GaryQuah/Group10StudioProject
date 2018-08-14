@@ -31,8 +31,10 @@ Console g_Console(80, 25, "SP1 Framework");
 // Input    : void
 // Output   : void
 //--------------------------------------------------------------
+
 void init(void)
 {
+
 	// Set precision for floating point output
 	g_dElapsedTime = 0.0;
 	g_dBounceTime = 0.0;
@@ -45,6 +47,29 @@ void init(void)
 	g_sChar.m_bActive = true;
 	// sets the width, height and the font name to use in the console
 	g_Console.setConsoleFont(0, 16, L"Consolas");
+
+	vector<string> map;
+	string line;
+	ifstream myfile("map.txt");
+	COORD c;
+
+	//storing text text file into array
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			for (int i = 0; i < line.length(); i++)
+			{
+				if (line[i] == '@')
+				{
+					line[i] = 219;
+				}
+			}
+			map.push_back(line);
+
+		}
+		myfile.close();
+	}
 }
 
 //--------------------------------------------------------------
@@ -149,8 +174,6 @@ void moveAI()
 	renderAI;
 }
 
-
-
 void gameplay()            // gameplay logic
 {
 	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
@@ -187,9 +210,11 @@ void moveCharacter()
 
 	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 0)
 	{
-		//Beep(1440, 30);
-		g_sChar.m_cLocation.X--;
-		bSomethingHappened = true;
+		if (g_sChar.m_cLocation.Y != '#') {
+			//Beep(1440, 30);
+			g_sChar.m_cLocation.X--;
+			bSomethingHappened = true;
+		}
 	}
 	if (g_abKeyPressed[K_DOWN] && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
 	{
@@ -199,6 +224,7 @@ void moveCharacter()
 	}
 	if (g_abKeyPressed[K_RIGHT] && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
 	{
+		
 		//Beep(1440, 30);
 		g_sChar.m_cLocation.X++;
 		bSomethingHappened = true;
@@ -264,31 +290,11 @@ void renderAI()
 	g_Console.writeToBuffer(d, 234);
 }
 
-void renderMap()
+
+void renderMap(vector<string> map, COORD c)
 {
+	
 	//char Map[height][width]; //storing map
-	vector<string> map;
-	string line;
-	ifstream myfile("map.txt");
-	COORD c;
-
-	//storing text text file into array
-	if (myfile.is_open())
-	{
-		while (getline(myfile, line))
-		{
-			for (int i = 0; i < line.length(); i++)
-			{
-				if (line[i] == '@')
-				{
-					line[i] = 219;
-				}
-			}
-			map.push_back(line);
-
-		}
-		myfile.close();
-	}
 
 	int pos = 0;
 	int xpos = 0;
