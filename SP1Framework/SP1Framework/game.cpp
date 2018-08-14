@@ -252,6 +252,13 @@ void renderMap()
 	{
 		while (getline(myfile, line))
 		{
+			for (int i = 0; i < line.length(); i++)
+			{
+				if (line[i] == '@')
+				{
+					line[i] = 219;
+				}
+			}
 			map.push_back(line);
 
 		}
