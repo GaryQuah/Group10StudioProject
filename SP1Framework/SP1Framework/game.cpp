@@ -164,6 +164,17 @@ void moveCharacter()
 		g_sChar.m_cLocation.Y--;
 		bSomethingHappened = true;
 	}
+
+	//Collision Test
+	if (g_abKeyPressed[K_UP])
+	{
+		if (g_sChar.m_cLocation.Y < 2)
+		{
+			g_sChar.m_cLocation.Y++;
+			bCollide = true;
+		}
+	}
+
 	if (g_abKeyPressed[K_LEFT] && g_sChar.m_cLocation.X > 0)
 	{
 		//Beep(1440, 30);
